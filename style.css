@@ -32,3 +32,14 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
+.calculator {
+  background-color: #2b2b2b;
+  margin: 10px;
+  padding: 5px;
+}
+
+.display {
+  background-color: white;
+  text-align: right;
+  margin-bottom: 5px;
+}
