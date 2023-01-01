@@ -11,7 +11,25 @@ const display = document.querySelector('.display');
 const numbers = document.querySelectorAll('.numbers > button');
 const operators = document.querySelectorAll('.operators > button');
 const equals = document.querySelector('.button-equals');
+const backspace = document.querySelector('.button-backspace');
 const clear = document.querySelector('.button-clear');
+const allButtons = document.querySelectorAll('.calculator > button, * > button');
+
+window.addEventListener('keydown', detectButtonPress);
+
+clear.addEventListener('click', () => {
+  reset();
+});
+
+backspace.addEventListener('click', () => {
+  display.textContent = display.textContent.slice(0,-1);
+});
+
+equals.addEventListener('click', () => {
+  if (storedNumber1 != null && display.textContent !== "" && display.textContent !== "+" && display.textContent !== "-" && display.textContent !== "x" && display.textContent !== "÷") {
+    calc();
+  }
+});
 
 numbers.forEach((number) => {
   number.addEventListener('click', () => {
@@ -29,24 +47,52 @@ operators.forEach((operator) => {
   });
 });
 
-equals.addEventListener('click', () => {
-  if (storedNumber1 != null && display.textContent != "") {
-    calc();
+
+
+
+
+function detectButtonPress(e) {
+  e.preventDefault();
+
+  const btn = document.querySelector(`button.key-${e.keyCode}-shift`);
+  
+  if (btn) {
+    if (e.shiftKey) {
+      btn.click();
+      return;
+    }
   }
-});
 
-clear.addEventListener('click', () => {
-  reset();
-});
-
-
+  if (e.shiftKey) {
+    return;
+  } else {
+    const btn2 = document.querySelector(`button.key-${e.keyCode}`);
+    if (btn2) {
+      btn2.click();
+    }
+  }
+}
 
 function displayInput(number) {
+  if (number.textContent === ".") {
+    if (display.textContent.includes(".")) {
+      return;
+    }
+  }
+
+  if (display.textContent === "+" || display.textContent === "-" || display.textContent === "x" || display.textContent === "÷") {
+    display.textContent = "";
+  }
+
   if (waitForNum) {
     display.textContent = number.textContent;
     waitForNum = false;
   } else if (display.textContent === "0") {
-    display.textContent = number.textContent;
+    if (number.textContent === ".") {
+      display.textContent += number.textContent;
+    } else {
+      display.textContent = number.textContent;
+    }
   } else if (display.textContent === "Cannot divide by zero.") {
     reset();
     display.textContent = number.textContent;
@@ -59,7 +105,7 @@ function selectOperator(operator) {
   if (firstOperator) {
     storedNumber1 = display.textContent;
     storedOperator = operator.textContent;
-    display.textContent = "";
+    display.textContent = storedOperator;
     firstOperator = false;
     firstEquals = true;
   } else {
