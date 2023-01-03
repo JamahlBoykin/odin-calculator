@@ -12,30 +12,43 @@
   </head>
   
   <body>
-    <div class="calculator">
-      <div class="display">0</div>
-      <div class="numbers">
-        <button class="button-1 key-49 key-97">1</button>
-        <button class="button-2 key-50 key-98">2</button>
-        <button class="button-3 key-51 key-99">3</button>
-        <button class="button-4 key-52 key-100">4</button>
-        <button class="button-5 key-53 key-101">5</button>
-        <button class="button-6 key-54 key-102">6</button>
-        <button class="button-7 key-55 key-103">7</button>
-        <button class="button-8 key-56 key-104">8</button>
-        <button class="button-9 key-57 key-105">9</button>
-        <button class="button-0 key-48 key-96">0</button>
-        <button class="button-decimal key-190 key-110">.</button>
-      </div>
-      <div class="operators">
-        <button class="button-add key-187-shift key-107">+</button>
-        <button class="button-subtract key-189 key-109">-</button>
-        <button class="button-multiply key-56-shift key-88 key-106">x</button>
-        <button class="button-divide key-191 key-111">÷</button>
-      </div>
-      <button class="button-equals key-187 key-13">=</button>
-      <button class="button-backspace key-8 key-46">⌫</button>
-      <button class="button-clear key-27">Clear</button>
+    <div class="wrapper">
+      <main class="main">
+        <div class="calculator">
+          <div class="display">0</div>
+        
+          <button class="button-clear key-27">C</button>
+          <button class="button-backspace key-8 key-46">⌫</button>
+          <button class="numbers button-7 key-55 key-103">7</button>
+          <button class="numbers button-8 key-56 key-104">8</button>
+          <button class="numbers button-9 key-57 key-105">9</button>
+          <button class="operators button-divide key-191 key-111">÷</button>
+
+          <button class="numbers button-4 key-52 key-100">4</button>
+          <button class="numbers button-5 key-53 key-101">5</button>
+          <button class="numbers button-6 key-54 key-102">6</button>
+          <button class="operators button-multiply key-56-shift key-88 key-106">x</button>
+
+          <button class="numbers button-1 key-49 key-97">1</button>
+          <button class="numbers button-2 key-50 key-98">2</button>
+          <button class="numbers button-3 key-51 key-99">3</button>
+          <button class="operators button-subtract key-189 key-109">-</button>
+        
+          <button class="numbers button-0 key-48 key-96">0</button>
+          <button class="numbers button-decimal key-190 key-110">.</button>
+          <button class="button-equals key-187 key-13">=</button>
+          <button class="operators button-add key-187-shift key-107">+</button>
+        </div>
+      </main>
+      
+      <footer class="footer">
+        <a href="https://github.com/JamahlBoykin">
+          <img src="./images/github-mark-white.svg" alt="Link to the creator's GitHub profile." class="link-github">
+        </a>
+        <p>
+          © <script>document.write(new Date().getFullYear())</script> Jamahl Boykin
+        </p>
+      </footer>
     </div>
   </body>
 </html>

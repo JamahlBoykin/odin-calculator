@@ -8,12 +8,18 @@ let waitForNum = false;
 let chaining = false;
 
 const display = document.querySelector('.display');
-const numbers = document.querySelectorAll('.numbers > button');
-const operators = document.querySelectorAll('.operators > button');
+const numbers = document.querySelectorAll('.numbers');
+const operators = document.querySelectorAll('.operators');
 const equals = document.querySelector('.button-equals');
 const backspace = document.querySelector('.button-backspace');
 const clear = document.querySelector('.button-clear');
-const allButtons = document.querySelectorAll('.calculator > button, * > button');
+const buttons = document.querySelectorAll('.calculator > button, * > button');
+
+buttons.forEach((button) => {
+  button.setAttribute("tabIndex", -1);
+  button.setAttribute("onclick", "blur()");
+  button.setAttribute("onmouseleave", "blur()");
+});
 
 window.addEventListener('keydown', detectButtonPress);
 
@@ -22,7 +28,9 @@ clear.addEventListener('click', () => {
 });
 
 backspace.addEventListener('click', () => {
-  display.textContent = display.textContent.slice(0,-1);
+  if (display.textContent !== "" && display.textContent !== "+" && display.textContent !== "-" && display.textContent !== "x" && display.textContent !== "÷") {
+    display.textContent = display.textContent.slice(0,-1);
+  }
 });
 
 equals.addEventListener('click', () => {
@@ -39,11 +47,7 @@ numbers.forEach((number) => {
 
 operators.forEach((operator) => {
   operator.addEventListener('click', () => {
-    if (display.textContent === "Cannot divide by zero.") {
-      reset();
-    } else {
-      selectOperator(operator);
-    }
+    selectOperator(operator);
   });
 });
 
@@ -52,7 +56,14 @@ operators.forEach((operator) => {
 
 
 function detectButtonPress(e) {
-  e.preventDefault();
+  if (e.key === "Enter" || e.key === "/") {
+    e.preventDefault();
+  }
+
+  if (display.textContent === "Infinity" || display.textContent === "NaN") {
+    reset();
+    return;
+  }
 
   const btn = document.querySelector(`button.key-${e.keyCode}-shift`);
   
@@ -74,6 +85,12 @@ function detectButtonPress(e) {
 }
 
 function displayInput(number) {
+  if (display.textContent === "Infinity" || display.textContent === "NaN" || display.textContent === "Cannot divide by zero.") {
+    reset();
+    display.textContent = number.textContent;
+    return;
+  }
+
   if (number.textContent === ".") {
     if (display.textContent.includes(".")) {
       return;
@@ -93,15 +110,17 @@ function displayInput(number) {
     } else {
       display.textContent = number.textContent;
     }
-  } else if (display.textContent === "Cannot divide by zero.") {
-    reset();
-    display.textContent = number.textContent;
   } else {
     display.textContent += number.textContent;
   }
 }
 
 function selectOperator(operator) {
+  if (display.textContent === "Infinity" || display.textContent === "NaN" || display.textContent === "Cannot divide by zero.") {
+    reset();
+    return;
+  }
+
   if (firstOperator) {
     storedNumber1 = display.textContent;
     storedOperator = operator.textContent;
@@ -109,7 +128,7 @@ function selectOperator(operator) {
     firstOperator = false;
     firstEquals = true;
   } else {
-    if (storedNumber1 !== null && display.textContent !== "" && waitForNum === false) {
+    if (storedNumber1 !== null && waitForNum === false && display.textContent !== "" && display.textContent !== "+" && display.textContent !== "-" && display.textContent !== "x" && display.textContent !== "÷") {
       chaining = true;
       calc();
     }
