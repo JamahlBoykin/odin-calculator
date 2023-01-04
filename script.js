@@ -1,6 +1,9 @@
 let firstNum = null;
 let secondNum = null;
+let repeatNum = null;
+let repeatOperator = null;
 let selectedOperator = null;
+let waitingForNum = false;
 
 const calcScreen = document.querySelector('.calcDisplay');
 const inputScreen = document.querySelector('.inputDisplay');
@@ -26,7 +29,11 @@ backspaceButton.addEventListener('click', backspace);
 
 function displayInput() {
   if (needsReset()) reset();
-  if (inputScreen.textContent === "") removeOperatorHighlighting();
+  if (waitingForNum) {
+    removeOperatorHighlighting();
+    waitingForNum = false;
+    inputScreen.textContent = "";
+  }
   if (this.textContent === ".") {
     if (!inputScreen.textContent.includes(".")) {
       if (inputScreen.textContent === "") inputScreen.textContent += "0";
@@ -44,11 +51,17 @@ function selectOperator() {
     reset();
     return;
   }
+  if (checkForEquation()) {
+    calcAnswer();
+    if (inputScreen.textContent === "Can't divide by 0.") {
+      return;
+    }
+  }
   if (inputScreen.textContent.slice(-1) === ".") backspace();
   if (inputScreen.textContent !== "") firstNum = inputScreen.textContent;
   selectedOperator = this.textContent;
   calcScreen.textContent = firstNum + " " + selectedOperator;
-  inputScreen.textContent = "";
+  waitingForNum = true;
   removeOperatorHighlighting();
   this.classList.add("selectedOperator");
 }
@@ -64,16 +77,29 @@ function calcAnswer() {
     reset();
     return;
   }
-  if (firstNum !== null && selectedOperator !== null && inputScreen.textContent !== "") {
+  if (checkForEquation()) {
     secondNum = inputScreen.textContent;
+  } else if (repeatNum !== null && repeatOperator !== null) {
+      secondNum = repeatNum;
+      selectedOperator = repeatOperator;
   } else {
     return;
   }
-  calcScreen.textContent += " " + secondNum + " =";
+  if (selectedOperator === "÷" && secondNum === "0") {
+    inputScreen.textContent = "Can't divide by 0.";
+    return;
+  }
+  calcScreen.textContent = firstNum + " " + selectedOperator + " " + secondNum + " =";
   inputScreen.textContent = operate(selectedOperator, Number(firstNum), Number(secondNum));
   firstNum = inputScreen.textContent;
+  repeatNum = secondNum;
+  repeatOperator = selectedOperator;
   secondNum = null;
   selectedOperator = null;
+}
+
+function checkForEquation() {
+  return (firstNum !== null && selectedOperator !== null && !waitingForNum);
 }
 
 function backspace() {
@@ -81,14 +107,14 @@ function backspace() {
     reset();
     return;
   }
-  if (inputScreen.textContent.length > 1) {
-    inputScreen.textContent = inputScreen.textContent.slice(0,-1);
-  }
+  inputScreen.textContent = inputScreen.textContent.slice(0,-1);
 }
 
 function reset() {
   firstNum = null;
   secondNum = null;
+  repeatNum = null;
+  repeatOperator = null;
   selectedOperator = null;
   calcScreen.textContent = "";
   inputScreen.textContent = "0";
@@ -96,7 +122,7 @@ function reset() {
 }
 
 function needsReset() {
-  return ((inputScreen.textContent === "Infinity" || inputScreen.textContent === "NaN" || inputScreen.textContent === "Cannot divide by 0.") ? true : false);
+  return ((inputScreen.textContent === "Infinity" || inputScreen.textContent === "NaN" || inputScreen.textContent === "Can't divide by 0.") ? true : false);
 }
 
 function add(num1, num2) {
