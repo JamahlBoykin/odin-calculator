@@ -1,10 +1,12 @@
 let firstNum = null;
+let secondNum = null;
 let selectedOperator = null;
 
 const calcScreen = document.querySelector('.calcDisplay');
 const inputScreen = document.querySelector('.inputDisplay');
 const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
+const equalsButton = document.querySelector('.button-equals');
 
 numberButtons.forEach((number) => {
   number.addEventListener('click', displayInput);
@@ -13,6 +15,8 @@ numberButtons.forEach((number) => {
 operatorButtons.forEach((operator) => {
   operator.addEventListener('click', selectOperator);
 });
+
+equalsButton.addEventListener('click', calcAnswer);
 
 
 
@@ -23,12 +27,9 @@ function displayInput() {
 
 function selectOperator() {
   if (inputScreen.textContent !== "") firstNum = inputScreen.textContent;
-
   selectedOperator = this.textContent;
-  
   calcScreen.textContent = firstNum + " " + selectedOperator;
   inputScreen.textContent = "";
-
   removeOperatorHighlighting();
   this.classList.add("selectedOperator");
 }
@@ -37,6 +38,15 @@ function removeOperatorHighlighting() {
   operatorButtons.forEach((operator) => {
     operator.classList.remove("selectedOperator");
   });
+}
+
+function calcAnswer() {
+  secondNum = inputScreen.textContent;
+  calcScreen.textContent += " " + secondNum + " =";
+  inputScreen.textContent = operate(selectedOperator, Number(firstNum), Number(secondNum));
+  firstNum = inputScreen.textContent;
+  secondNum = null;
+  selectedOperator = null;
 }
 
 function add(num1, num2) {
