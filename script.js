@@ -6,6 +6,7 @@ const calcScreen = document.querySelector('.calcDisplay');
 const inputScreen = document.querySelector('.inputDisplay');
 const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
+const clearButton = document.querySelector('.button-clear');
 const equalsButton = document.querySelector('.button-equals');
 
 numberButtons.forEach((number) => {
@@ -16,6 +17,7 @@ operatorButtons.forEach((operator) => {
   operator.addEventListener('click', selectOperator);
 });
 
+clearButton.addEventListener('click', reset);
 equalsButton.addEventListener('click', calcAnswer);
 
 
@@ -47,6 +49,15 @@ function calcAnswer() {
   firstNum = inputScreen.textContent;
   secondNum = null;
   selectedOperator = null;
+}
+
+function reset() {
+  firstNum = null;
+  secondNum = null;
+  selectedOperator = null;
+  calcScreen.textContent = "";
+  inputScreen.textContent = "0";
+  removeOperatorHighlighting();
 }
 
 function add(num1, num2) {
