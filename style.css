@@ -86,18 +86,33 @@ body {
   color: #e7e7e7;
 }
 
-.display {
+.calcDisplay, .inputDisplay {
   background-color: rgba(32, 32, 32, 0.8);
-  border: rgba(32, 32, 32, 0) solid 8px;
   display: flex;
   justify-content: right;
   align-items: center;
   text-align: right;
-  font-size: 40px;
-  margin-bottom: 3px;
   grid-column: 1 / -1;
   overflow-wrap: anywhere;
-  aspect-ratio: 3 / 1;
+}
+
+.calcDisplay {
+  color: rgba(232, 232, 232, 0.6);
+  font-size: 20px;
+  margin-bottom: -5px;
+  border-radius: 4px 4px 0px 0px;
+  border: rgba(32, 32, 32, 0) solid 8px;
+  border-bottom: none;
+  aspect-ratio: 8 / 1;
+}
+
+.inputDisplay {
+  font-size: 40px;
+  margin-bottom: 3px;
+  border-radius: 0px 0px 4px 4px;
+  border: rgba(32, 32, 32, 0) solid 8px;
+  border-top: none;
+  aspect-ratio: 4 / 1;
 }
 
 .calculator > button {
@@ -115,6 +130,14 @@ body {
 
 .calculator > button:active {
   background-color: rgba(32, 32, 32, 1);
+}
+
+.operator.selectedOperator {
+  background-color: rgba(223, 223, 223, 0.4)
+}
+
+.operator.selectedOperator:hover {
+  background-color: rgba(223, 223, 223, 0.2)
 }
 
 button.button-backspace {

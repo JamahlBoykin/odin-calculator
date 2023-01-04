@@ -1,9 +1,11 @@
-const inputScreen = document.querySelector('.display');
+const inputScreen = document.querySelector('.inputDisplay');
 const numberButtons = document.querySelectorAll('.number');
 
 numberButtons.forEach((number) => {
   number.addEventListener('click', displayInput);
 });
+
+
 
 function displayInput() {
   inputScreen.textContent += this.textContent;
