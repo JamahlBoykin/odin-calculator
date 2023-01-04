@@ -25,11 +25,26 @@ backspaceButton.addEventListener('click', backspace);
 
 
 function displayInput() {
+  if (needsReset()) reset();
   if (inputScreen.textContent === "") removeOperatorHighlighting();
-  inputScreen.textContent += this.textContent;
+  if (this.textContent === ".") {
+    if (!inputScreen.textContent.includes(".")) {
+      if (inputScreen.textContent === "") inputScreen.textContent += "0";
+      inputScreen.textContent += this.textContent;
+    }
+  } else if (inputScreen.textContent === "0") {
+    inputScreen.textContent = this.textContent;
+  } else {
+    inputScreen.textContent += this.textContent;
+  }
 }
 
 function selectOperator() {
+  if (needsReset()) {
+    reset();
+    return;
+  }
+  if (inputScreen.textContent.slice(-1) === ".") backspace();
   if (inputScreen.textContent !== "") firstNum = inputScreen.textContent;
   selectedOperator = this.textContent;
   calcScreen.textContent = firstNum + " " + selectedOperator;
@@ -45,7 +60,15 @@ function removeOperatorHighlighting() {
 }
 
 function calcAnswer() {
-  secondNum = inputScreen.textContent;
+  if (needsReset()) {
+    reset();
+    return;
+  }
+  if (firstNum !== null && selectedOperator !== null && inputScreen.textContent !== "") {
+    secondNum = inputScreen.textContent;
+  } else {
+    return;
+  }
   calcScreen.textContent += " " + secondNum + " =";
   inputScreen.textContent = operate(selectedOperator, Number(firstNum), Number(secondNum));
   firstNum = inputScreen.textContent;
@@ -54,6 +77,10 @@ function calcAnswer() {
 }
 
 function backspace() {
+  if (needsReset()) {
+    reset();
+    return;
+  }
   if (inputScreen.textContent.length > 1) {
     inputScreen.textContent = inputScreen.textContent.slice(0,-1);
   }
@@ -66,6 +93,10 @@ function reset() {
   calcScreen.textContent = "";
   inputScreen.textContent = "0";
   removeOperatorHighlighting();
+}
+
+function needsReset() {
+  return ((inputScreen.textContent === "Infinity" || inputScreen.textContent === "NaN" || inputScreen.textContent === "Cannot divide by 0.") ? true : false);
 }
 
 function add(num1, num2) {
