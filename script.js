@@ -1,14 +1,42 @@
+let firstNum = null;
+let selectedOperator = null;
+
+const calcScreen = document.querySelector('.calcDisplay');
 const inputScreen = document.querySelector('.inputDisplay');
 const numberButtons = document.querySelectorAll('.number');
+const operatorButtons = document.querySelectorAll('.operator');
 
 numberButtons.forEach((number) => {
   number.addEventListener('click', displayInput);
 });
 
+operatorButtons.forEach((operator) => {
+  operator.addEventListener('click', selectOperator);
+});
+
 
 
 function displayInput() {
+  if (inputScreen.textContent === "") removeOperatorHighlighting();
   inputScreen.textContent += this.textContent;
+}
+
+function selectOperator() {
+  if (inputScreen.textContent !== "") firstNum = inputScreen.textContent;
+
+  selectedOperator = this.textContent;
+  
+  calcScreen.textContent = firstNum + " " + selectedOperator;
+  inputScreen.textContent = "";
+
+  removeOperatorHighlighting();
+  this.classList.add("selectedOperator");
+}
+
+function removeOperatorHighlighting() {
+  operatorButtons.forEach((operator) => {
+    operator.classList.remove("selectedOperator");
+  });
 }
 
 function add(num1, num2) {
