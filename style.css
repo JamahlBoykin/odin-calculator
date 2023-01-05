@@ -128,7 +128,7 @@ body {
   background-color: rgba(32, 32, 32, 0.8);
 }
 
-.calculator > button:active {
+.calculator > button:active, .calculator > button.active {
   background-color: rgba(32, 32, 32, 1);
 }
 
